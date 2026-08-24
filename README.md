@@ -1,4 +1,4 @@
-# DeepSeek-V4-Flash on FOUR NVIDIA DGX Spark (GB10) — TP=4 recipe
+# DeepSeek-V4-Flash On FOUR NVIDIA DGX Spark (GB10): TP=4 Recipe
 
 > **Unofficial community recipe.** Not affiliated with, endorsed by, or supported by
 > DeepSeek, NVIDIA, or the vLLM project. All names and trademarks belong to their owners.
