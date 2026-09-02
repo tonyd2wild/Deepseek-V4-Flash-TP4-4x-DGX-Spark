@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # DeepSeek-V4-Flash on FOUR NVIDIA DGX Spark (GB10) — vLLM multi-node, TENSOR-PARALLEL 4.
 #
-# This is the 4-node ("TP4") sibling of unholy-launch.sh. Instead of two Sparks at TP=2,
-# all FOUR Sparks join ONE tensor-parallel group. Each node then holds only a QUARTER of
+# This is the 4-node ("TP4") sibling of our two-Spark TP=2 recipe. Instead of two Sparks at
+# TP=2, all FOUR Sparks join ONE tensor-parallel group. Each node then holds only a QUARTER of
 # the weights, which (counter-intuitively) makes single-stream decode FASTER, not slower,
-# on the Spark's fast RoCE fabric — see TP4-4X-SPARK.md for the why and the numbers.
+# on the Spark's fast RoCE fabric — see README.md for the why and the numbers.
 #
 # WHY TP4 IS DIFFERENT FROM TP2 ON THE FABRIC:
 #   TP=2 can run over a single QSFP cable directly between two Sparks (link-local 169.254.x).
@@ -23,7 +23,7 @@
 #
 # STARTUP ORDER: start the THREE WORKERS (ranks 3, 2, 1) FIRST, then the HEAD (rank 0).
 #
-# Fill in the <PLACEHOLDERS> for your rig (see unholy-launch.sh for the RDMA/NCCL notes —
+# Fill in the <PLACEHOLDERS> for your rig (see README.md for the RDMA/NCCL notes —
 # they are identical here; the only new requirement is the switched fabric + per-node IP):
 #   <HEAD_FABRIC_IP>  - the HEAD node's IP on the switched RoCE fabric (rendezvous master).
 #   rocep1s0f0        - your cabled RoCE HCA device name (confirm with `ibstatus`).
@@ -95,7 +95,7 @@ docker ps --format '{{.Names}} | {{.Status}}' | grep vllm_ds4_tp4 || echo "WARN:
 #
 # NOTES
 # - max-num-seqs 6 is comfortable here; the KV pool is ~4x larger than TP=2, so the
-#   scheduler has plenty of headroom (you can push seqs higher). See TP4-4X-SPARK.md.
+#   scheduler has plenty of headroom (you can push seqs higher). See README.md.
 # - max-model-len 300000 keeps concurrency high for agents; the ~6M-token KV pool can
 #   serve up to ~1M-token single requests if you raise it.
 # - JSON args (--speculative-config, etc.) are single-quoted so they survive the inner

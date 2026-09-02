@@ -1,5 +1,20 @@
 # DeepSeek-V4-Flash On FOUR NVIDIA DGX Spark (GB10): TP=4 Recipe
 
+> **This is the public sparkrun-image recipe, not the fleet recipe.** This repo is the public
+> community recipe for serving DeepSeek-V4-Flash at **TP=4** on four DGX Sparks using the
+> public `sparkrun` image (FP8 KV cache, MTP k=2 speculative decoding, 300K context, served on
+> port 8000). It is **not** the fleet recipe the owner runs day to day. The maintained fleet
+> recipes are in the DSpark NVFP4-KV Vision-Exp repo —
+> [`tonyd2wild/DeepSeek-v4-Flash-Vision-Exp-DSpark-1M-NVFP4-KV-2x-DGX-Spark`](https://github.com/tonyd2wild/DeepSeek-v4-Flash-Vision-Exp-DSpark-1M-NVFP4-KV-2x-DGX-Spark)
+> (see its `CURRENT.md`) — for both TP2 and TP4. Three places this repo's guidance differs
+> from those repos, noted neutrally for anyone cross-referencing:
+> - This recipe pins `NCCL_IB_GID_INDEX=3`; the fleet repos auto-detect the GID (it has
+>   drifted from 3 to 4 in the field).
+> - This recipe sets `VLLM_CACHE_ROOT` on a shared path; the fleet repos document that as a
+>   JIT-cache trap on NFS.
+> - The TROUBLESHOOTING note here that "NVFP4 is a mirage" is about the model weights (which
+>   are FP8), not about the `nvfp4_ds_mla` KV-cache dtype the fleet repos use.
+
 > **Unofficial community recipe.** Not affiliated with, endorsed by, or supported by
 > DeepSeek, NVIDIA, or the vLLM project. All names and trademarks belong to their owners.
 > Every number labeled "our measurement" is from our own rig — treat it as *relative*, not
